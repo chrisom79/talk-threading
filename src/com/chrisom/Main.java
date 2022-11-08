@@ -16,8 +16,8 @@ public class Main {
         );
 
         preguntas.stream().forEach(q -> {
-            BolaOcho c = new BolaOcho();
-            c.ask(q);
+            BolaOcho c = new BolaOcho(q);
+            c.start();
         });
     }
 }
