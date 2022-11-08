@@ -3,12 +3,8 @@ package com.chrisom;
 import java.lang.Thread;
 import java.util.Random;
 
-public class BolaOcho extends Thread {
+public class BolaOcho implements Runnable {
     Pregunta pregunta;
-
-    public BolaOcho(Pregunta pregunta) {
-        this.pregunta = pregunta;
-    }
 
     private int getSleepTimeInMs(Pregunta.Dificultad dificultad) {
         switch (dificultad) {
@@ -53,7 +49,6 @@ public class BolaOcho extends Thread {
         System.out.println("Respuesta: " + this.answer());
     }
 
-    @Override
     public void run() {
         this.ask(this.pregunta);
     }

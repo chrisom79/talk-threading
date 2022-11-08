@@ -15,9 +15,12 @@ public class Main {
                 new Pregunta(Pregunta.Dificultad.MEDIO, "Algun dia le ganare en dinero a Elon Musk?")
         );
 
+        BolaOcho bolaOcho = new BolaOcho();
+
         preguntas.stream().forEach(q -> {
-            BolaOcho c = new BolaOcho(q);
-            c.start();
+            new Thread(() -> {
+                bolaOcho.ask(q);
+            }).start();
         });
     }
 }
