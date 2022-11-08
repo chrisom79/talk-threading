@@ -2,8 +2,26 @@ package com.chrisom;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
+    public static Thread createMonitor(List<Thread> threads) {
+        return new Thread(() -> {
+            while (true) {
+                List<String> runningThreads = threads.stream().filter(Thread::isAlive).map(Thread::getName).collect(Collectors.toList());
+                System.out.println(Thread.currentThread().getName() + " - Actualmente corriendo: " + runningThreads);
+                if (runningThreads.isEmpty()) {
+                    break;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                }
+            }
+            System.out.println(Thread.currentThread().getName() + " - Todos los hilos completados!");
+        });
+    }
 
     public static void main(String[] args) {
         List<Pregunta> preguntas = Arrays.asList(
@@ -17,10 +35,12 @@ public class Main {
 
         BolaOcho bolaOcho = new BolaOcho();
 
-        preguntas.stream().forEach(q -> {
-            new Thread(() -> {
-                bolaOcho.ask(q);
-            }).start();
-        });
+        List<Thread> threads = preguntas.stream().map(q -> new Thread(() -> {
+            bolaOcho.ask(q);
+        })).collect(Collectors.toList());
+
+        Thread monitor = Main.createMonitor(threads);
+        threads.forEach(t -> t.start());
+        monitor.start();
     }
 }
