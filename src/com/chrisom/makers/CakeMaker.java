@@ -57,7 +57,14 @@ public class CakeMaker {
     public void mixDryIngredients() {
         try {
             printTask("Mixing dry ingredients...");
-            mixingBowlInUse = true;
+            synchronized(this) {
+                while(mixingBowlInUse) {
+                    printTask("Waiting for the mixing bowl...");
+                    wait();
+                }
+                printTask("Using mixing bowl!");
+                mixingBowlInUse = true;
+            }
             Thread.sleep(200);
             printTask("Adding cake flour");
             Thread.sleep(200);
@@ -71,7 +78,12 @@ public class CakeMaker {
             printTask("Mixing...");
             Thread.sleep(200);
             whiskInUse = false;
-            mixingBowlInUse = false;
+
+            synchronized(this) {
+                mixingBowlInUse = false;
+                printTask("Releasing mixing bowl!");
+                notifyAll();
+            }
             printTask("Done!");
         } catch (InterruptedException e) {
             System.out.println(e);
@@ -81,7 +93,16 @@ public class CakeMaker {
     public void mixWetIngredients() {
         try {
             printTask("Mixing wet ingredients...");
-            mixingBowlInUse = true;
+
+            synchronized(this) {
+                while(mixingBowlInUse) {
+                    printTask("Waiting for the mixing bowl...");
+                    wait();
+                }
+                printTask("Using mixing bowl!");
+                mixingBowlInUse = true;
+            }
+
             Thread.sleep(1000);
             printTask("Adding butter...");
             Thread.sleep(500);
@@ -95,7 +116,13 @@ public class CakeMaker {
             printTask("Mixing...");
             Thread.sleep(1500);
             whiskInUse = false;
-            mixingBowlInUse = false;
+
+            synchronized(this) {
+                mixingBowlInUse = false;
+                printTask("Releasing mixing bowl!");
+                notifyAll();
+            }
+
             printTask("Done!");
         } catch (InterruptedException e) {
             System.out.println(e);

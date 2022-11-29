@@ -36,7 +36,7 @@ public class BolaOcho implements Runnable {
     private void think(Pregunta pregunta) {
         System.out.println("Dejame ver... Pensando");
         try {
-            Thread.sleep(this.getSleepTimeInMs(pregunta.getDificultad()));
+            Thread.sleep(this.getSleepTimeInMs(pregunta.dificultad()));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -44,7 +44,7 @@ public class BolaOcho implements Runnable {
     }
 
     public void ask(Pregunta pregunta) {
-        System.out.println("Buena pregunta! Preguntaste: " + pregunta.getPregunta());
+        System.out.println("Buena pregunta! Preguntaste: " + pregunta.pregunta());
         this.think(pregunta);
         System.out.println("Respuesta: " + this.answer());
     }
